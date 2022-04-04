@@ -9,7 +9,7 @@ interface MainProps {
 
 const Main: FC<MainProps> = ({ Locations }) => {
 	return (
-		<div className='p-3 inline-flex flex-wrap gap-10 '>
+		<div className='px-3 py-4 inline-flex flex-wrap items-start gap-10 '>
 			{Locations.map((location) => {
 				return <WeatherCard location={location} />;
 			})}

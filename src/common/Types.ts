@@ -38,5 +38,4 @@ export interface WindWeaterData {
 export interface ILocationsContext {
 	locations: string[];
 	removeLocation: (location: string) => void;
-	renameLocation: (oldLocation: string, location: string) => void;
 }

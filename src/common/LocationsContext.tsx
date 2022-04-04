@@ -10,7 +10,6 @@ interface LocationsContextProviderProps {
 export const LocationsContext = createContext<ILocationsContext>({
 	locations: [],
 	removeLocation: (location: string) => {},
-	renameLocation:(oldLocation: string, location: string) => {},
 });
 
 const LocationsContextProvider: FC<LocationsContextProviderProps> = ({

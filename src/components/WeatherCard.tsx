@@ -29,7 +29,6 @@ const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 					name: e.name,
 					visibility: e.visibility,
 				};
-				Context.renameLocation(location, data.name);
 				setWeaterData(data);
 			})
 			.catch(() => {

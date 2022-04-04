@@ -2,7 +2,7 @@
 
 import { FC, useState, useEffect, useContext } from 'react';
 import Infopanel from './Infopanel';
-import { LocationsContext } from '../common/LocationsContext'
+import { LocationsContext } from '../common/LocationsContext';
 import { WeaterData } from '../common/Types';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ interface WeatherCardProps {
 
 const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 	const [weatherData, setWeaterData] = useState<WeaterData | undefined>();
-    const Context = useContext(LocationsContext);
+	const Context = useContext(LocationsContext);
 	useEffect(() => {
 		axios
 			.get(
@@ -29,6 +29,7 @@ const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 					name: e.name,
 					visibility: e.visibility,
 				};
+				Context.renameLocation(location, data.name);
 				setWeaterData(data);
 			})
 			.catch(() => {
@@ -37,9 +38,9 @@ const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 	}, [location]);
 
 	return (
-		<div className=' card overflow-visible items-center gap-2 shadow-xl bg-base-200 w-80 border-2 border-primary relative'>
+		<div className='relative'>
 			<div
-				className='tooltip  absolute top-[-1rem] right-[-1rem] z-10'
+				className='tooltip tooltip-left absolute top-[-1rem] right-[-1rem] z-10'
 				data-tip='Delete this card'>
 				<button
 					className=' btn btn-error btn-circle btn-sm text-lg'
@@ -47,21 +48,22 @@ const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 					<i className='fa-solid fa-x'></i>
 				</button>
 			</div>
-
-			{weatherData ? (
-				<>
-					<img
-						className='h-64 py-4 object-cover'
-						src={`./icons/${weatherData.weather.icon}.png`}
-						alt='non'
-					/>
-					<Infopanel WeaterData={weatherData} />
-				</>
-			) : (
-				<div className=' flex grow items-center  w-full'>
-					<progress className='progress progress-primary w-full'></progress>
-				</div>
-			)}
+			<div className=' card items-center gap-2 shadow-xl bg-base-200 w-80 border-2 border-primary '>
+				{weatherData ? (
+					<>
+						<img
+							className='h-64 py-4 object-cover'
+							src={`./icons/${weatherData.weather.icon}.png`}
+							alt='non'
+						/>
+						<Infopanel WeaterData={weatherData} />
+					</>
+				) : (
+					<div className=' flex grow items-center  w-full'>
+						<progress className='progress progress-primary w-full'></progress>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

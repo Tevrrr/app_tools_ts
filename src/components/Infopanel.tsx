@@ -9,7 +9,7 @@ interface InfopanelProps {
 
 const Infopanel: FC<InfopanelProps> = ({ WeaterData }) => {
 	return (
-		<div className='flex flex-col items-center grow w-full bg-primary text-primary-content'>
+		<div className='flex flex-col items-center grow w-full bg-primary'>
 			<h1 className=' text-center text-3xl font-bold'>
 				{WeaterData.name}
 			</h1>

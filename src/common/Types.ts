@@ -30,12 +30,13 @@ export interface MainWeaterData {
 }
 
 export interface WindWeaterData {
-	speed: number,
-	deg: number,
-	gust: number,
+	speed: number;
+	deg: number;
+	gust: number;
 }
 
 export interface ILocationsContext {
 	locations: string[];
 	removeLocation: (location: string) => void;
+	renameLocation: (oldLocation: string, location: string) => void;
 }

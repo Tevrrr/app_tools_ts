@@ -2153,6 +2153,15 @@ html {
   bottom: auto;
 }
 
+.tooltip-left:before {
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  top: 50%;
+  left: auto;
+  right: var(--tooltip-offset);
+  bottom: auto;
+}
+
 .tooltip-right:before {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
@@ -2863,6 +2872,16 @@ html {
   bottom: auto;
 }
 
+.tooltip-left:after {
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-color: transparent transparent transparent var(--tooltip-color);
+  top: 50%;
+  left: auto;
+  right: calc(var(--tooltip-tail-offset) + 1px);
+  bottom: auto;
+}
+
 .tooltip-right:after {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
@@ -2875,6 +2894,21 @@ html {
 
 .rounded-box {
   border-radius: var(--rounded-box, 1rem);
+}
+
+.rounded-l-box {
+  border-top-left-radius: var(--rounded-box, 1rem);
+  border-bottom-left-radius: var(--rounded-box, 1rem);
+}
+
+.\!rounded-l-box {
+  border-top-left-radius: var(--rounded-box, 1rem) !important;
+  border-bottom-left-radius: var(--rounded-box, 1rem) !important;
+}
+
+.\!rounded-r-box {
+  border-top-right-radius: var(--rounded-box, 1rem) !important;
+  border-bottom-right-radius: var(--rounded-box, 1rem) !important;
 }
 
 .btn-sm {
@@ -3107,6 +3141,21 @@ html {
   overflow-x: hidden;
 }
 
+.rounded-b {
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.rounded-r-none {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.\!rounded-r-none {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
 .border-2 {
   border-width: 2px;
 }
@@ -3163,6 +3212,11 @@ html {
   padding-right: 0.75rem;
 }
 
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
 .pl-0 {
   padding-left: 0px;
 }
@@ -3192,6 +3246,21 @@ html {
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .font-bold {

@@ -1,47 +1,28 @@
 /** @format */
 
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import ThemeMenu from './items/ThemeMenu';
 
-interface NavbarProps {
-	addLocations?: (location: string) => void;
-}
+interface NavbarProps {}
 
-const Navbar: FC<NavbarProps> = ({ addLocations }) => {
-	const [location, setLocation] = useState('');
-
-	function sendLocations(): void {
-		if (location.length > 2 && addLocations) {
-			addLocations(location);
-		}
-	}
-
+const Navbar: FC<NavbarProps> = () => {
 	return (
-		<div className='navbar bg-primary px-5'>
-			<label className=' flex-1 input-group input-group-sm '>
-				<div
-					className=' tooltip tooltip-bottom '
-					data-tip='Enter the name of the location'>
-					<input
-						type='text'
-						className=' input input-sm input-bordered !rounded-l-box !rounded-r-none input-accent font-medium'
-						placeholder='Enter location...'
-						value={location}
-						onChange={(e) => setLocation(e.target.value)}
-					/>
-				</div>
-
-				<div
-					className=' tooltip tooltip-right'
-					data-tip='Add weather card'>
-					<button
-						className=' btn btn-sm btn-accent font-black text-lg pl-2 !rounded-r-box'
-						onClick={() => sendLocations()}>
-						<i className='fa-solid fa-plus'></i>
-					</button>
-				</div>
+		<div className=' navbar fixed top-0 left-0 z-20 justify-between gap-2 bg-primary px-3'>
+			<label
+				htmlFor='my-drawer'
+				className='btn  btn-circle drawer-button text-2xl'>
+				<i className='fa-solid fa-bars'></i>
 			</label>
-			<ThemeMenu />
+			<div className=' flex gap-2'>
+				<ThemeMenu />
+				<button className='btn btn-circle text-2xl'>
+					{false ? (
+						<i className='fa-solid fa-user'></i>
+					) : (
+						<i className='fa-solid fa-arrow-right-to-bracket'></i>
+					)}
+				</button>
+			</div>
 		</div>
 	);
 };

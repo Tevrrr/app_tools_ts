@@ -14,7 +14,7 @@ const Infopanel: FC<InfopanelProps> = ({ WeaterData }) => {
 				{WeaterData.name}
 			</h1>
 			<div className=' flex gap-5 justify-center'>
-				<ul className=' text-2xl flex flex-col gap-2 p-2'>
+				<ul className=' text-2xl flex flex-col gap-2 py-2'>
 					<li className='flex items-center'>
 						<i className='w-12 fa-solid fa-temperature-low'></i>
 						{Math.round(WeaterData.main.temp)}°C
@@ -29,7 +29,7 @@ const Infopanel: FC<InfopanelProps> = ({ WeaterData }) => {
 					</li>
 				</ul>
 				<div className='divider divider-horizontal grow'></div>
-				<ul className=' text-2xl flex flex-col gap-2 p-2'>
+				<ul className=' text-2xl flex flex-col gap-2 py-2'>
 					<li className='flex items-center'>
 						<i className='w-12 fa-solid fa-eye'></i>
 						{Math.round(WeaterData.visibility / 100)}%

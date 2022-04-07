@@ -27,17 +27,17 @@ const ThemeMenu: FC = () => {
 	}, [currentTheme]);
 	return (
 		<div className=' dropdown dropdown-end'>
-			<label tabIndex={0} className='btn btn-sm normal-case flex gap-1'>
+			<label tabIndex={0} className='btn btn-sm text-lg normal-case flex gap-1'>
 				Themes <i className='fa-solid fa-angle-down'></i>
 			</label>
-			<div className=' dropdown-content menu bg-base-300 min-w-[6rem] p-2 p rounded-box overflow-x-hidden overflow-y-auto max-h-52 shadow-lg'>
+			<div className=' dropdown-content menu bg-base-300 min-w-[6rem] p-2 p rounded-box overflow-x-hidden overflow-y-auto max-h-72 shadow-lg'>
 				<ul>
 					{Themes.map((item: IThemeSelectItem) => {
 						return (
 							<li>
 								<button
 									className={
-										'btn btn-sm btn-ghost justify-start normal-case ' +
+										'btn  btn-ghost justify-start normal-case text-lg ' +
 										(item.theme === currentTheme
 											? 'active'
 											: '')

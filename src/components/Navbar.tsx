@@ -7,7 +7,7 @@ interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = () => {
 	return (
-		<div className=' navbar fixed top-0 left-0 z-20 justify-between gap-2 bg-primary px-3'>
+		<div className=' navbar fixed top-0 left-0 z-20 justify-between gap-2 bg-primary px-3 h-16'>
 			<label
 				htmlFor='my-drawer'
 				className='btn  btn-circle drawer-button text-2xl'>

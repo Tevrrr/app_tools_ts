@@ -39,3 +39,8 @@ export interface ILocationsContext {
 	locations: string[];
 	removeLocation: (location: string) => void;
 }
+export interface ITodo {
+    id: number;
+	text: string;
+    checked: boolean;
+}

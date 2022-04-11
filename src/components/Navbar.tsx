@@ -1,9 +1,18 @@
 /** @format */
 
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import ThemeMenu from './items/ThemeMenu';
 
-interface NavbarProps {}
+
+interface NavbarProps { }
+
+function RequireAuth(): string {
+	if (!false) {
+		return '/login'
+	}
+	return '/user';
+}
 
 const Navbar: FC<NavbarProps> = () => {
 	return (
@@ -15,13 +24,13 @@ const Navbar: FC<NavbarProps> = () => {
 			</label>
 			<div className=' flex gap-2'>
 				<ThemeMenu />
-				<button className='btn btn-circle text-2xl'>
+				<Link to={RequireAuth()} className='btn btn-circle text-2xl'>
 					{false ? (
 						<i className='fa-solid fa-user'></i>
 					) : (
 						<i className='fa-solid fa-arrow-right-to-bracket'></i>
 					)}
-				</button>
+				</Link>
 			</div>
 		</div>
 	);

@@ -35,9 +35,10 @@ export interface WindWeaterData {
 	gust: number;
 }
 
-export interface ILocationsContext {
-	locations: string[];
-	removeLocation: (location: string) => void;
+export interface IAlertsContext {
+	alerts: IAlert[];
+    removeAlert: (id: number) => void;
+    addAlert: (type: AlertType, text: string) => void;
 }
 export interface ITodo {
     id: number;
@@ -46,5 +47,18 @@ export interface ITodo {
 }
 
 export interface IAlert {
-    value: string;
+	alertType: AlertType;
+	value: string;
+	id: number;
+}
+
+
+
+
+
+export enum AlertType {
+	info = 'info',
+	success = 'success',
+	warning = 'warning',
+	error = 'error',
 }

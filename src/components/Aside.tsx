@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import {  NavLink } from "react-router-dom";
 
 interface AsideProps {
     

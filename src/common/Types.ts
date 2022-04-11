@@ -44,3 +44,7 @@ export interface ITodo {
 	text: string;
     checked: boolean;
 }
+
+export interface IAlert {
+    value: string;
+}

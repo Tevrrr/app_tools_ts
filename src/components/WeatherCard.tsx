@@ -1,18 +1,17 @@
 /** @format */
 
-import { FC, useState, useEffect, useContext } from 'react';
+import { FC, useState, useEffect } from 'react';
 import Infopanel from './Infopanel';
-import { LocationsContext } from '../common/LocationsContext';
 import { WeaterData } from '../common/Types';
 import axios from 'axios';
 
 interface WeatherCardProps {
 	location: string;
+	removeLocation:(location: string)=> void;
 }
 
-const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
+const WeatherCard: FC<WeatherCardProps> = ({ location, removeLocation }) => {
 	const [weatherData, setWeaterData] = useState<WeaterData | undefined>();
-	const Context = useContext(LocationsContext);
 	useEffect(() => {
 		axios
 			.get(
@@ -32,7 +31,7 @@ const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 				setWeaterData(data);
 			})
 			.catch(() => {
-				Context.removeLocation(location);
+				removeLocation(location);
 			});
 	}, [location]);
 
@@ -43,7 +42,7 @@ const WeatherCard: FC<WeatherCardProps> = ({ location }) => {
 				data-tip='Delete this card'>
 				<button
 					className=' btn btn-error btn-circle btn-sm text-lg'
-					onClick={() => Context.removeLocation(location)}>
+					onClick={() => removeLocation(location)}>
 					<i className='fa-solid fa-x'></i>
 				</button>
 			</div>

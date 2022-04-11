@@ -2,7 +2,6 @@
 
 import { FC, useState } from 'react';
 import WeatherCard from '../components/WeatherCard';
-import LocationsContextProvider from '../common/LocationsContext';
 import Input from '../components/items/Input';
 
 interface WeatherProps {}
@@ -21,11 +20,6 @@ const Weather: FC<WeatherProps> = () => {
 	}
 	return (
 		<div className='pt-10 flex flex-col items-center'>
-			<LocationsContextProvider
-				value={{
-					locations,
-					removeLocation,
-				}}>
 				<div className=' w-80'>
 					<Input
 						inputProps={addLocations}
@@ -35,10 +29,15 @@ const Weather: FC<WeatherProps> = () => {
 
 				<div className='px-3 py-7 flex flex-wrap items-start justify-center gap-10 '>
 					{locations.map((location, i) => {
-						return <WeatherCard location={location} key={i} />;
+						return (
+							<WeatherCard
+								location={location}
+								removeLocation={removeLocation}
+								key={i}
+							/>
+						);
 					})}
 				</div>
-			</LocationsContextProvider>
 		</div>
 	);
 };

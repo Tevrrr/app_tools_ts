@@ -52,6 +52,11 @@ export interface IAlert {
 	id: number;
 }
 
+export interface IUser {
+    loading: boolean;
+    email: string;
+
+}
 
 
 

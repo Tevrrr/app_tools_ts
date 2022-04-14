@@ -1,11 +1,14 @@
 /** @format */
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
+	const [saving, setSaving] = useState(false);
+
 	return (
 		<div className='flex items-center justify-center px-2 py-10'>
 			<form
@@ -14,12 +17,12 @@ const Login: FC<LoginProps> = () => {
 				<h1 className=' text-4xl font-bold uppercase'>Login</h1>
 				<input
 					className=' input w-full max-w-xs input-primary text-lg font-bold'
-					type='text'
+					type='email'
 					placeholder='Email'
 				/>
 				<input
 					className=' input w-full max-w-xs input-primary text-lg font-bold'
-					type='text'
+					type='password'
 					placeholder='Password'
 				/>
 
@@ -27,6 +30,8 @@ const Login: FC<LoginProps> = () => {
 					<input
 						type='checkbox'
 						className=' checkbox checkbox-primary border-2'
+						checked={saving}
+						onChange={(e) => setSaving(e.target.checked)}
 					/>{' '}
 					Remember me?
 				</div>

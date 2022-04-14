@@ -14,7 +14,7 @@ const MessageBox: FC<MessageBoxProps> = () => {
 			{alerts.alerts.map((item) => {
                 return <Alert alert={item} key={item.id} />;
 			})}
-
+            <div className=" hidden alert-info alert-success alert-warning alert-error"></div>
 		</div>
 	);
 };

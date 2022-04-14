@@ -1,30 +1,64 @@
 /** @format */
 
-import { FC } from 'react';
+import { FC, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { validateEmail, validatePassword } from '../common/User';
+import { AlertsContext } from '../common/AlertContext';
+import { AlertType } from '../common/Types';
 
 interface SignUpProps {}
 
 const SignUp: FC<SignUpProps> = () => {
+	const alerts = useContext(AlertsContext);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [passwordRepeat, setPasswordRepeat] = useState('');
+	function submitForm(e: React.FormEvent) {
+		e.preventDefault();
+		if (password !== passwordRepeat) {
+			alerts.addAlert(AlertType.error, 'Passwords do not match!');
+		}
+		if (!validatePassword(password)) {
+			alerts.addAlert(
+				AlertType.error,
+				'The password is incorrect! Must contain at least one number, one upper and lower case letter, and at least 8 or more characters.'
+			);
+		}
+		if (!validateEmail(email)) {
+			alerts.addAlert(AlertType.error, 'Email was entered incorrectly!');
+		}
+	}
 	return (
 		<div className='flex items-center justify-center px-2 py-10'>
 			<form
 				className=' card gap-5 px-2 py-4 items-center bg-base-300 w-full max-w-sm'
-				onSubmit={(e) => e.preventDefault()}>
+				onSubmit={submitForm}>
 				<h1 className=' text-4xl font-bold uppercase'>Sign up</h1>
 				<input
 					className=' input w-full max-w-xs input-primary text-lg font-bold'
 					type='text'
 					placeholder='Email'
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<input
 					className=' input w-full max-w-xs input-primary text-lg font-bold'
-					type='text'
+					type='password'
 					placeholder='Password'
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
+				/>
+
+				<input
+					className=' input w-full max-w-xs input-primary text-lg font-bold'
+					type='password'
+					placeholder='Password repeat'
+					value={passwordRepeat}
+					onChange={(e) => setPasswordRepeat(e.target.value)}
 				/>
 				<button className='btn btn-primary text-2xl w-full max-w-xs uppercase'>
 					Sign up
-                </button>
+				</button>
 				<div className='divider'>OR</div>
 				<button className='btn text-2xl btn-circle'>
 					<i className='fa-brands fa-google'></i>

@@ -1,9 +1,12 @@
 /** @format */
 
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useContext } from 'react';
 import Infopanel from './Infopanel';
 import { WeaterData } from '../common/Types';
 import axios from 'axios';
+import { AlertsContext } from '../common/AlertContext'
+import { AlertType } from '../common/Types';
+
 
 interface WeatherCardProps {
 	location: string;
@@ -11,7 +14,8 @@ interface WeatherCardProps {
 }
 
 const WeatherCard: FC<WeatherCardProps> = ({ location, removeLocation }) => {
-	const [weatherData, setWeaterData] = useState<WeaterData | undefined>();
+    const [weatherData, setWeaterData] = useState<WeaterData | undefined>();
+    const alerts = useContext(AlertsContext)
 	useEffect(() => {
 		axios
 			.get(
@@ -31,7 +35,8 @@ const WeatherCard: FC<WeatherCardProps> = ({ location, removeLocation }) => {
 				setWeaterData(data);
 			})
 			.catch(() => {
-				removeLocation(location);
+                removeLocation(location);
+                alerts.addAlert(AlertType.error, 'Location not found');
 			});
 	}, [location]);
 

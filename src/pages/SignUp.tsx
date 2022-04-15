@@ -4,12 +4,14 @@ import { FC, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../common/User';
 import { AlertsContext } from '../common/AlertContext';
+import { ClientContext } from '../common/ClientContext';
 import { AlertType } from '../common/Types';
 
 interface SignUpProps {}
 
 const SignUp: FC<SignUpProps> = () => {
 	const alerts = useContext(AlertsContext);
+	const user = useContext(ClientContext);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [passwordRepeat, setPasswordRepeat] = useState('');
@@ -26,7 +28,9 @@ const SignUp: FC<SignUpProps> = () => {
 		}
 		if (!validateEmail(email)) {
 			alerts.addAlert(AlertType.error, 'Email was entered incorrectly!');
-		}
+        } if (password === passwordRepeat && validatePassword(password) && validateEmail(email)) {
+            user.registerUser(email, password, email);
+        }
 	}
 	return (
 		<div className='flex items-center justify-center px-2 py-10'>

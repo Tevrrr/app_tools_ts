@@ -1,6 +1,5 @@
 /** @format */
 
-import { supabase } from './supabase/supabaseClient';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import Aside from './components/Aside';
 import MessageBox from './components/MessageBox';
@@ -11,16 +10,17 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import { AlertType } from './common/Types';
 import {AlertsContext} from './common/AlertContext'
+import { ClientContext } from './common/ClientContext';
 import { useContext } from 'react';
 
 function App() {
         const alerts = useContext(AlertsContext);
-		let hasUserAccess = false;
+        const client = useContext(ClientContext);
 
 		function RequireAuth({ children }: { children: JSX.Element }) {
 			let location = useLocation();
 
-			if (!hasUserAccess) {
+			if (client.user === null) {
 				alerts.addAlert(
 					AlertType.error,
 					'Available only for authorized users! '

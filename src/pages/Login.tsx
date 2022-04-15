@@ -1,14 +1,20 @@
 /** @format */
 
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-
+import { ClientContext } from '../common/ClientContext';
 
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
+	const user = useContext(ClientContext);
 	const [saving, setSaving] = useState(false);
-
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	function login(): void {
+		if (email.length > 3 && password.length > 3)
+			user.login(email, password);
+	}
 	return (
 		<div className='flex items-center justify-center px-2 py-10'>
 			<form
@@ -17,13 +23,17 @@ const Login: FC<LoginProps> = () => {
 				<h1 className=' text-4xl font-bold uppercase'>Login</h1>
 				<input
 					className=' input w-full max-w-xs input-primary text-lg font-bold'
-					type='email'
+					type='text'
 					placeholder='Email'
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<input
 					className=' input w-full max-w-xs input-primary text-lg font-bold'
 					type='password'
 					placeholder='Password'
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
 
 				<div className=' w-full max-w-xs  flex gap-4 text-lg items-center'>
@@ -35,7 +45,9 @@ const Login: FC<LoginProps> = () => {
 					/>{' '}
 					Remember me?
 				</div>
-				<button className='btn btn-primary text-2xl w-full max-w-xs uppercase'>
+				<button
+					className='btn btn-primary text-2xl w-full max-w-xs uppercase'
+					onClick={login}>
 					Login
 				</button>
 				<div className='divider'>OR</div>

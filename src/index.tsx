@@ -10,11 +10,11 @@ import ClientProvider from './common/ClientContext';
 
 ReactDOM.render(
 	<BrowserRouter>
-		<ClientProvider>
-			<AlertsContextProvider>
+		<AlertsContextProvider>
+			<ClientProvider>
 				<App />
-			</AlertsContextProvider>
-		</ClientProvider>
+			</ClientProvider>
+		</AlertsContextProvider>
 	</BrowserRouter>,
 	document.getElementById('root')
 );

@@ -1,4 +1,5 @@
 /** @format */
+import { User } from '@supabase/supabase-js';
 
 export interface IThemeSelectItem {
 	theme: string;
@@ -37,13 +38,13 @@ export interface WindWeaterData {
 
 export interface IAlertsContext {
 	alerts: IAlert[];
-    removeAlert: (id: number) => void;
-    addAlert: (type: AlertType, text: string) => void;
+	removeAlert: (id: number) => void;
+	addAlert: (type: AlertType, text: string) => void;
 }
 export interface ITodo {
-    id: number;
+	id: number;
 	text: string;
-    checked: boolean;
+	checked: boolean;
 }
 
 export interface IAlert {
@@ -53,13 +54,11 @@ export interface IAlert {
 }
 
 export interface IUser {
-    loading: boolean;
-    email: string;
-
+	loading: null | boolean;
+	user: User | null;
+	registerUser: (email: string, password: string, userName: string) => void;
+	login: (email: string, password: string) => void;
 }
-
-
-
 
 export enum AlertType {
 	info = 'info',

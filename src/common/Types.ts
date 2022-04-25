@@ -57,7 +57,9 @@ export interface IUser {
 	loading: null | boolean;
 	user: User | null;
 	registerUser: (email: string, password: string, userName: string) => void;
-	login: (email: string, password: string) => void;
+	login: (email: string, password: string, saving: boolean) => void;
+	checkStorageUser: () => void;
+	exitUser: () => void;
 }
 
 export enum AlertType {

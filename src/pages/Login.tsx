@@ -1,19 +1,22 @@
 /** @format */
 
 import { FC, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 import { ClientContext } from '../common/ClientContext';
 
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
+    const navigate = useNavigate();
 	const user = useContext(ClientContext);
 	const [saving, setSaving] = useState(false);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	function login(): void {
-		if (email.length > 3 && password.length > 3)
-			user.login(email, password);
+		if (email.length > 3 && password.length > 3) {
+			user.login(email, password, saving);
+			navigate('/user', {replace:true})
+		}
 	}
 	return (
 		<div className='flex items-center justify-center px-2 py-10'>

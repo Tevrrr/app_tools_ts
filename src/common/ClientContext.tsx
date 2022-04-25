@@ -1,11 +1,6 @@
 /** @format */
 
-import React, {
-	FC,
-	createContext,
-	useState,
-	useContext,
-} from 'react';
+import React, { FC, createContext, useState, useContext } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../supabase/supabaseClient';
 import { IUser, AlertType } from './Types';
@@ -17,7 +12,9 @@ export const ClientContext = createContext<IUser>({
 	loading: false,
 	user: null,
 	registerUser: (email: string, password: string, userName: string) => {},
-	login: (email: string, password: string) => {},
+	login: (email: string, password: string, saving: boolean) => {},
+    checkStorageUser: () => { },
+    exitUser: () => {}
 });
 
 const serializeUser = (user: any) =>
@@ -45,8 +42,8 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 				.eq('email', email);
 			if (_error) throw _error;
 			console.log(_user);
-            if (_user.length === 0) {
-                const { user, error } = await supabase.auth.signUp(
+			if (_user.length === 0) {
+				const { user, error } = await supabase.auth.signUp(
 					{ email, password },
 					{
 						data: {
@@ -64,38 +61,63 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 					AlertType.success,
 					'Account created successfully! An email has been sent to you to confirm it.'
 				);
-
 			} else {
 				alerts.addAlert(
 					AlertType.error,
 					'The user with this email is already registered!'
-				);				
+				);
 			}
 		} catch (e) {
 			console.log(e);
-			console.log('Все хуева');
 		}
 	};
 
-	const login = async (email: string, password: string) => {
+	const login = async (email: string, password: string, saving: boolean) => {
 		try {
 			const { user, error } = await supabase.auth.signIn({
 				email,
 				password,
 			});
-            if (error) throw error;
-            setUser(user);
-			console.log(user);
-			console.log('Все заебиса');
+			if (error) throw error;
+			setUser(user);
+			if (saving) {
+				localStorage.setItem('user', JSON.stringify(user));
+				console.log('Local');
+			} else {
+				sessionStorage.setItem('user', JSON.stringify(user));
+
+				console.log('Session');
+			}
 		} catch (e: any) {
 			console.log(e);
 			if ((e.message = 'Invalid login credentials'))
 				alerts.addAlert(AlertType.error, 'Wrong login or password!');
 		}
 	};
+	const checkStorageUser = () => {
+		let user;
+		user = localStorage.getItem('user');
+		if (!user) user = sessionStorage.getItem('user');
+		if (user) user = JSON.parse(user);
+        setUser(user);
+	};
+
+	const exitUser = () => {
+		setUser(null);
+		localStorage.removeItem('user');
+		sessionStorage.removeItem('user');
+	};
 
 	return (
-		<ClientContext.Provider value={{ loading, user, registerUser, login }}>
+		<ClientContext.Provider
+			value={{
+				loading,
+				user,
+				registerUser,
+				login,
+				checkStorageUser,
+				exitUser,
+			}}>
 			{children}
 		</ClientContext.Provider>
 	);

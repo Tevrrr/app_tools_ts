@@ -9,54 +9,58 @@ import Weather from './pages/Weather';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import { AlertType } from './common/Types';
-import {AlertsContext} from './common/AlertContext'
+import { AlertsContext } from './common/AlertContext';
 import { ClientContext } from './common/ClientContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
+import User from './pages/User';
 
 function App() {
-        const alerts = useContext(AlertsContext);
-        const client = useContext(ClientContext);
+	const alerts = useContext(AlertsContext);
+	const client = useContext(ClientContext);
 
-		function RequireAuth({ children }: { children: JSX.Element }) {
-			let location = useLocation();
+    useEffect(() => {
+        if (client.user === null) {
+            client.checkStorageUser()
+		}}, []);
 
-			if (client.user === null) {
-				alerts.addAlert(
-					AlertType.error,
-					'Available only for authorized users! '
-				);
-				return (
-					<Navigate to='/login' state={{ from: location }} replace />
-				);
-			}
+	function RequireAuth({ children }: { children: JSX.Element }) {
+		let location = useLocation();
 
-			return children;
+		if (client.user === null) {
+			alerts.addAlert(
+				AlertType.error,
+				'Available only for authorized users! '
+			);
+			return <Navigate to='/login' state={{ from: location }} replace />;
 		}
 
-	return (
-        <div className='App relative flex flex-col items-center overflow-hidden min-h-screen pt-16'>
-			
-				<Navbar />
-				<Aside>
-					<Routes>
-						<Route path='/' element={<Weather />} />
-						<Route path='login' element={<Login />} />
-						<Route path='signup' element={<SignUp />} />
-						<Route path='weather' element={<Weather />} />
-						<Route
-							path='todo'
-							element={
-								<RequireAuth>
-									<Todo />
-								</RequireAuth>
-							}
-						/>
-					</Routes>
-				</Aside>
+		return children;
+	}
 
-				<div className=' absolute right-0 bottom-0 sm:w-96 w-full transition-all'>
-					<MessageBox />
-				</div>
+	return (
+		<div className='App relative flex flex-col items-center overflow-hidden min-h-screen pt-16'>
+			<Navbar />
+			<Aside>
+				<Routes>
+					<Route path='/' element={<Weather />} />
+					<Route path='login' element={<Login />} />
+					<Route path='signup' element={<SignUp />} />
+					<Route path='weather' element={<Weather />} />
+					<Route path='user' element={<User />} />
+					<Route
+						path='todo'
+						element={
+							<RequireAuth>
+								<Todo />
+							</RequireAuth>
+						}
+					/>
+				</Routes>
+			</Aside>
+
+			<div className=' absolute right-0 bottom-0 sm:w-96 w-full transition-all'>
+				<MessageBox />
+			</div>
 		</div>
 	);
 }

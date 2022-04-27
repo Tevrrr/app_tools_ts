@@ -3504,10 +3504,6 @@ body[dir="rtl"] .checkbox:checked,
   z-index: 10;
 }
 
-.m-10 {
-  margin: 2.5rem;
-}
-
 .flex {
   display: flex;
 }

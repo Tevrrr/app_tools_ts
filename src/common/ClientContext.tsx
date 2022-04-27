@@ -13,8 +13,12 @@ export const ClientContext = createContext<IUser>({
 	user: null,
 	registerUser: (email: string, password: string, userName: string) => {},
 	login: (email: string, password: string, saving: boolean) => {},
-    checkStorageUser: () => { },
-    exitUser: () => {}
+	checkStorageUser: () => {},
+	exitUser: () => {},
+});
+
+supabase.auth.onAuthStateChange((event, session) => {
+	console.log(event, session, 1);
 });
 
 const serializeUser = (user: any) =>
@@ -27,6 +31,7 @@ const serializeUser = (user: any) =>
 		: null;
 
 const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
+    
 	const alerts = useContext(AlertsContext);
 	const [loading, setLoading] = useState<null | boolean>(false);
 	const [user, setUser] = useState<null | User>(null);
@@ -94,19 +99,33 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 				alerts.addAlert(AlertType.error, 'Wrong login or password!');
 		}
 	};
-	const checkStorageUser = () => {
+	const checkStorageUser =  () => {
 		let user;
 		user = localStorage.getItem('user');
 		if (!user) user = sessionStorage.getItem('user');
 		if (user) user = JSON.parse(user);
-        setUser(user);
+        updateUser(user?.email);
 	};
 
 	const exitUser = () => {
 		setUser(null);
 		localStorage.removeItem('user');
 		sessionStorage.removeItem('user');
-	};
+    };
+    
+    async function updateUser( email:string ) {
+		try {
+			const { user, error } = await supabase.auth.update(
+				{
+					email,
+				}
+			);
+			if (error) throw error;
+			setUser( user);
+		} catch (e) {
+			throw e;
+		}
+	}
 
 	return (
 		<ClientContext.Provider

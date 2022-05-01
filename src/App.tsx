@@ -12,7 +12,6 @@ import { AlertType } from './common/Types';
 import { AlertsContext } from './common/AlertContext';
 import { ClientContext } from './common/ClientContext';
 import { useContext, useEffect } from 'react';
-import User from './pages/User';
 
 function App() {
 	const alerts = useContext(AlertsContext);
@@ -46,7 +45,6 @@ function App() {
 					<Route path='login' element={<Login />} />
 					<Route path='signup' element={<SignUp />} />
 					<Route path='weather' element={<Weather />} />
-					<Route path='user' element={<User />} />
 					<Route
 						path='todo'
 						element={

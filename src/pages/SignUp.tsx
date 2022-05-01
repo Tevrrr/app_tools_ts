@@ -29,7 +29,7 @@ const SignUp: FC<SignUpProps> = () => {
 		if (!validateEmail(email)) {
 			alerts.addAlert(AlertType.error, 'Email was entered incorrectly!');
         } if (password === passwordRepeat && validatePassword(password) && validateEmail(email)) {
-            user.registerUser(email, password, email.split('@')[0]);
+            user.registerUser(email, password);
         }
 	}
 	return (

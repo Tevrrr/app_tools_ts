@@ -3,75 +3,45 @@
 import React, { FC, createContext, useState, useContext } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../supabase/supabaseClient';
-import { IUser, AlertType } from './Types';
+import { IUser, AlertType, ITodo } from './Types';
 import { AlertsContext } from '../common/AlertContext';
 
 interface ClientProviderProps {}
 
 export const ClientContext = createContext<IUser>({
-	loading: false,
 	user: null,
-	registerUser: (email: string, password: string, userName: string) => {},
+	registerUser: (email: string, password: String) => {},
 	login: (email: string, password: string, saving: boolean) => {},
 	checkStorageUser: () => {},
 	exitUser: () => {},
+	addTodo: (todo: ITodo) => {},
+	delTodo: (id: number) => {},
+    checkedTodo: (id: number, checked: boolean) => { },
+    getTodo: (setTodo: (value: ITodo[]) => {}) => { }
 });
-
-supabase.auth.onAuthStateChange((event, session) => {
-	console.log(event, session, 1);
-});
-
-const serializeUser = (user: any) =>
-	user
-		? {
-				id: user.id,
-				email: user.email,
-				...user.user_metadata,
-		  }
-		: null;
 
 const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
-    
 	const alerts = useContext(AlertsContext);
-	const [loading, setLoading] = useState<null | boolean>(false);
 	const [user, setUser] = useState<null | User>(null);
-	const registerUser = async (
-		email: string,
-		password: string,
-		userName: string
-	) => {
+	
+    
+	const registerUser = async (email: string, password: string) => {
 		try {
-			const { data: _user, error: _error } = await supabase
-				.from('users')
-				.select()
-				.eq('email', email);
-			if (_error) throw _error;
-			console.log(_user);
-			if (_user.length === 0) {
-				const { user, error } = await supabase.auth.signUp(
-					{ email, password },
-					{
-						data: {
-							userName,
-						},
-					}
-				);
-				if (error) throw error;
-				const { data: _user, error: _error } = await supabase
-					.from('users')
-					.insert([serializeUser(user)])
-					.single();
-				if (_error) throw _error;
-				alerts.addAlert(
-					AlertType.success,
-					'Account created successfully! An email has been sent to you to confirm it.'
-				);
-			} else {
+			const { user, error } = await supabase.auth.signUp({
+				email,
+				password,
+			});
+			if (error) throw error;
+			if (!(user?.identities?.length !== 0))
 				alerts.addAlert(
 					AlertType.error,
 					'The user with this email is already registered!'
 				);
-			}
+			else
+				alerts.addAlert(
+					AlertType.success,
+					'Account created successfully! An email has been sent to you to confirm it.'
+				);
 		} catch (e) {
 			console.log(e);
 		}
@@ -99,43 +69,107 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 				alerts.addAlert(AlertType.error, 'Wrong login or password!');
 		}
 	};
-	const checkStorageUser =  () => {
+	const checkStorageUser = () => {
 		let user;
 		user = localStorage.getItem('user');
 		if (!user) user = sessionStorage.getItem('user');
 		if (user) user = JSON.parse(user);
-        updateUser(user?.email);
+		updateUser(user?.email);
 	};
 
-	const exitUser = () => {
+	const exitUser = async () => {
 		setUser(null);
 		localStorage.removeItem('user');
 		sessionStorage.removeItem('user');
-    };
-    
-    async function updateUser( email:string ) {
+		await supabase.auth.signOut();
+	};
+
+	async function updateUser(email: string) {
 		try {
-			const { user, error } = await supabase.auth.update(
-				{
-					email,
-				}
-			);
+			const { user, error } = await supabase.auth.update({
+				email,
+			});
 			if (error) throw error;
-			setUser( user);
+			setUser(user);
 		} catch (e) {
 			throw e;
 		}
 	}
 
+	const addTodo = async (todo: ITodo) => {
+		try {
+			const { data, error } = await supabase.from('todo').insert([
+				{
+					uid: user?.id,
+					...todo,
+				},
+			]);
+			if (error) throw error;
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const delTodo = async (id: number) => {
+		try {
+			const { data, error } = await supabase
+				.from('todo')
+				.delete()
+				.match({ id, uid: user?.id });
+			if (error) throw error;
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const checkedTodo = async (id: number, checked: boolean) => {
+		try {
+			const { data, error } = await supabase
+				.from('todo')
+				.update({ checked })
+				.match({ id, uid: user?.id });
+			if (error) throw error;
+		} catch (error) {
+			console.log(error);
+		}
+    };
+    const getTodo = async (setTodo: (value: ITodo[])=> { }) => {
+		try {
+			const { data, error } = await supabase
+				.from('todo')
+				.select('*')
+				.match({ uid: user?.id });
+            if (error) throw error;
+            supabase
+				.from('todo')
+				.on('*', async (payload) => {
+                    try {
+						const { data, error } = await supabase
+							.from('todo')
+							.select('*')
+							.match({ uid: user?.id });
+						if (error) throw error;
+						setTodo(data);
+					} catch (error) {
+						console.log(error);
+					}
+				})
+				.subscribe();
+            setTodo(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<ClientContext.Provider
 			value={{
-				loading,
 				user,
 				registerUser,
 				login,
 				checkStorageUser,
 				exitUser,
+				addTodo,
+				delTodo,
+                checkedTodo,
+                getTodo
 			}}>
 			{children}
 		</ClientContext.Provider>

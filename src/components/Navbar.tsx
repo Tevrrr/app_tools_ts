@@ -6,14 +6,11 @@ import { ClientContext } from '../common/ClientContext';
 
 import ThemeMenu from './items/ThemeMenu';
 
-
-interface NavbarProps { }
-
-
+interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = () => {
-    const client = useContext(ClientContext);
-    function RequireAuth(): string {
+	const client = useContext(ClientContext);
+	function RequireAuth(): string {
 		if (client.user !== null) {
 			return '/user';
 		}
@@ -28,13 +25,15 @@ const Navbar: FC<NavbarProps> = () => {
 			</label>
 			<div className=' flex gap-2'>
 				<ThemeMenu />
-				<Link to={RequireAuth()} className='btn btn-circle text-2xl'>
-					{client.user!==null ? (
-						<i className='fa-solid fa-user'></i>
-					) : (
+				{client.user !== null ? (
+					<button className='btn btn-circle btn-error text-2xl' onClick={()=>client.exitUser()}>
+						<i className='fa-solid fa-arrow-right-from-bracket'></i>
+					</button>
+				) : (
+					<Link to='/login' className='btn btn-circle text-2xl'>
 						<i className='fa-solid fa-arrow-right-to-bracket'></i>
-					)}
-				</Link>
+					</Link>
+				)}
 			</div>
 		</div>
 	);

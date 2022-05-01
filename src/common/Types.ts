@@ -54,12 +54,15 @@ export interface IAlert {
 }
 
 export interface IUser {
-	loading: null | boolean;
 	user: User | null;
-	registerUser: (email: string, password: string, userName: string) => void;
+	registerUser: (email: string, password: string) => void;
 	login: (email: string, password: string, saving: boolean) => void;
 	checkStorageUser: () => void;
 	exitUser: () => void;
+	addTodo: (todo: ITodo) => void;
+	delTodo: (id: number) => void;
+	checkedTodo: (id: number, checked: boolean) => void;
+	getTodo: (setTodo: any) => void;
 }
 
 export enum AlertType {

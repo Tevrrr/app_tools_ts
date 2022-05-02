@@ -63,6 +63,9 @@ export interface IUser {
 	delTodo: (id: number) => void;
 	checkedTodo: (id: number, checked: boolean) => void;
 	getTodo: (setTodo: any) => void;
+	addLocation: (location: string) => void;
+	delLocation: (location: string) => void;
+	getLocation: (setLocation: any) => void;
 }
 
 export enum AlertType {

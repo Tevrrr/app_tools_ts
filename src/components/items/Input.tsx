@@ -23,7 +23,7 @@ const Input: FC<InputProps> = ({ inputProps, placeholder }) => {
 			onSubmit={(e) => e.preventDefault()}>
 			<input
 				type='text'
-				className='grow input input-bordered input-accent text-lg font-medium'
+				className='grow input w-full input-bordered input-accent text-lg font-medium'
 				placeholder={placeholder}
 				value={value}
 				onChange={(e) => setValue(e.target.value)}

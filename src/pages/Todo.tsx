@@ -10,14 +10,11 @@ interface TodoProps {}
 
 const Todo: FC<TodoProps> = () => {
 	const [todos, setTodos] = useState<ITodo[]>([]);
-    const client = useContext(ClientContext);
-    
-    useEffect(() => {
-      client.getTodo(setTodos)
-    
+	const client = useContext(ClientContext);
 
-    }, [])
-    
+	useEffect(() => {
+		client.getTodo(setTodos);
+	}, [client]);
 
 	function addTodo(text: string) {
 		let todo = { id: Date.now(), text, checked: false };
@@ -37,8 +34,8 @@ const Todo: FC<TodoProps> = () => {
 	function checkedTodo(id: number) {
 		setTodos(
 			todos.map((item) => {
-                if (item.id === id) {
-                    client.checkedTodo(id, !item.checked);
+				if (item.id === id) {
+					client.checkedTodo(id, !item.checked);
 					return { ...item, checked: !item.checked };
 				}
 				return item;
@@ -47,7 +44,7 @@ const Todo: FC<TodoProps> = () => {
 	}
 
 	return (
-		<div className=' flex min-h-full justify-center p-7'>
+		<div className=' flex min-h-full min-w-[15rem] justify-center p-4'>
 			<div className='card gap-4 w-[31rem] bg-base-200 p-3 '>
 				<Input placeholder='Enter Todo..' inputProps={addTodo} />
 				<div className='flex flex-col gap-2'>

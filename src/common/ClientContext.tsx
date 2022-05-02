@@ -16,15 +16,17 @@ export const ClientContext = createContext<IUser>({
 	exitUser: () => {},
 	addTodo: (todo: ITodo) => {},
 	delTodo: (id: number) => {},
-    checkedTodo: (id: number, checked: boolean) => { },
-    getTodo: (setTodo: (value: ITodo[]) => {}) => { }
+	checkedTodo: (id: number, checked: boolean) => {},
+	getTodo: (setTodo: (value: ITodo[]) => {}) => {},
+	addLocation: (location: string) => {},
+	delLocation: (location: string) => {},
+	getLocation: (setLocation: any) => {},
 });
 
 const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 	const alerts = useContext(AlertsContext);
 	const [user, setUser] = useState<null | User>(null);
-	
-    
+
 	const registerUser = async (email: string, password: string) => {
 		try {
 			const { user, error } = await supabase.auth.signUp({
@@ -130,18 +132,18 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 		} catch (error) {
 			console.log(error);
 		}
-    };
-    const getTodo = async (setTodo: (value: ITodo[])=> { }) => {
+	};
+	const getTodo = async (setTodo: (value: ITodo[]) => {}) => {
 		try {
 			const { data, error } = await supabase
 				.from('todo')
 				.select('*')
 				.match({ uid: user?.id });
-            if (error) throw error;
-            supabase
+			if (error) throw error;
+			supabase
 				.from('todo')
 				.on('*', async (payload) => {
-                    try {
+					try {
 						const { data, error } = await supabase
 							.from('todo')
 							.select('*')
@@ -153,11 +155,66 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 					}
 				})
 				.subscribe();
-            setTodo(data);
+			setTodo(data);
 		} catch (error) {
 			console.log(error);
 		}
 	};
+
+	const addLocation = async (location: string) => {
+		try {
+			const { data, error } = await supabase.from('weather').insert([
+				{
+					uid: user?.id,
+					location,
+				},
+			]);
+			if (error) throw error;
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const delLocation = async (location: string) => {try {
+		const { data, error } = await supabase
+			.from('weather')
+			.delete()
+			.match({ location, uid: user?.id });
+		if (error) throw error;
+	} catch (error) {
+		console.log(error);
+        }
+    };
+    
+	const getLocation = async (setLocation: (value: string[]) => {}) => {
+		try {
+			const { data, error } = await supabase
+				.from('weather')
+				.select('*')
+				.match({ uid: user?.id });
+			if (error) throw error;
+			supabase
+				.from('weather')
+				.on('*', async (payload) => {
+					try {
+						const { data, error } = await supabase
+							.from('weather')
+							.select('*')
+							.match({ uid: user?.id });
+						if (error) throw error;
+						setLocation(data.map((item: any) => item.location));
+						console.log(data);
+					} catch (error) {
+						console.log(error);
+					}
+				})
+                .subscribe();
+			console.log(data);
+			setLocation(data.map((item: any) => item.location));
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<ClientContext.Provider
 			value={{
@@ -168,8 +225,11 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 				exitUser,
 				addTodo,
 				delTodo,
-                checkedTodo,
-                getTodo
+				checkedTodo,
+				getTodo,
+				addLocation,
+				delLocation,
+				getLocation,
 			}}>
 			{children}
 		</ClientContext.Provider>

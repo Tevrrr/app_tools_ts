@@ -59,14 +59,10 @@ const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
 			setUser(user);
 			if (saving) {
 				localStorage.setItem('user', JSON.stringify(user));
-				console.log('Local');
 			} else {
 				sessionStorage.setItem('user', JSON.stringify(user));
-
-				console.log('Session');
 			}
 		} catch (e: any) {
-			console.log(e);
 			if ((e.message = 'Invalid login credentials'))
 				alerts.addAlert(AlertType.error, 'Wrong login or password!');
 		}
